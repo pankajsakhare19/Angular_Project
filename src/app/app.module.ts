@@ -4,7 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatToolbarModule } from '@angular/material/toolbar'; 
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AppComponent } from './app.component';
-
+import { HttpClientModule } from '@angular/common/http';
 import 'hammerjs';
 import { MenuComponent } from './menu/menu.component';
 import { MatListModule } from '@angular/material/list';
@@ -34,7 +34,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import {MatSliderModule} from '@angular/material/slider';
 
+import { baseURL } from './shared/baseurl';
 
 @NgModule({
   declarations: [
@@ -66,12 +68,19 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatSlideToggleModule,
     ReactiveFormsModule,
     MatProgressSpinnerModule,
+    MatSliderModule,
+    HttpClientModule,
     FormsModule
   ],
   entryComponents: [
     LoginComponent
 ],
-  providers: [DishService, PromotionService, LeaderService],
+  providers: [
+    DishService, 
+    PromotionService, 
+    LeaderService,
+    { provide: 'BaseURL', useValue: baseURL }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
