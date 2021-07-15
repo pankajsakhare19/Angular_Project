@@ -6,7 +6,7 @@ import { Params, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { switchMap } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import {Comment} from '../shared/comment'
 
 
 @Component({
@@ -21,11 +21,13 @@ export class DishdetailComponent implements OnInit {
   dishIds: string[];
   prev: string;
   next: string;
+
   
   @ViewChild('cform') commentFormDirective;
   comment: Comment;
   commentForm: FormGroup;
-
+  dishcopy: Dish;
+  
   formErrors={
     'author': '',
     "comment": ''
@@ -50,11 +52,10 @@ export class DishdetailComponent implements OnInit {
 
     ngOnInit() {
       this.createForm();
-
-      this.dishservice.getDishIds().subscribe(dishIds => this.dishIds = dishIds);
-      this.route.params.pipe(switchMap((params: Params) => this.dishservice.getDish(params['id'])))
-      .subscribe(dish => { this.dish = dish; this.setPrevNext(dish.id); },
-      errmess => this.errMess = <any>errmess);
+      this.route.params
+      .pipe(switchMap((params: Params) => this.dishservice.getDish(params['id'])))
+      .subscribe(dish => { this.dish = dish; this.dishcopy = dish; this.setPrevNext(dish.id); },
+        errmess => this.errMess = <any>errmess );
     }
   
     setPrevNext(dishId: string) {
@@ -105,19 +106,23 @@ export class DishdetailComponent implements OnInit {
   }
 
   onSubmit() {
-    var d = new Date();
-    var a = d.toISOString();
     this.comment = this.commentForm.value;
-    this.comment['date'] = a;
-    this.dish['comments'].push(this.commentForm.value);
+    this.comment.date = new Date().toISOString();
+    this.dishcopy.comments.push(this.comment);
+    this.dishservice.putDish(this.dishcopy)
+      .subscribe(dish => {
+        this.dish = dish; this.dishcopy = dish;
+      },
+      errmess => { this.dish = null; this.dishcopy = null; this.errMess = <any>errmess; });
     console.log(this.comment);
+    this.commentFormDirective.resetForm();
     this.commentForm.reset({
       author: '',
-      rating: '5',
+      rating: 5,
       comment: '',
-      date: ''
     });
-    this.commentFormDirective.resetForm();
+
+
   }
   
 }
