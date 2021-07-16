@@ -36,7 +36,7 @@
     </div>
   </div>
 
-  <div fxFlex fxFlexOffset="20px" class="form-size">
+  <div fxFlex fxFlexOffset="20px" class="form-size" *ngIf="!isLoading"  @expand="">
     <h3>Send us your Feedback</h3>
     <p>{{ feedbackForm.value | json }} {{ feedbackForm.status | json }}</p>
 
@@ -83,4 +83,52 @@
       <button type="submit" mat-button class="background-primary text-floral-white">Submit</button>
     </form>
   </div>
+  <div [hidden]="!isLoading"  @expand="">
+    <h3>Submitting Form</h3>
+    <mat-spinner></mat-spinner><h4>Loading . . . Please Wait</h4>
+  </div>
+  <div fxFlex *ngIf="errMess">
+    <h2>Error</h2>
+    <h4>{{errMess}}</h4>
+  </div>
+
+  <mat-card *ngIf="isShowingResponse" style="display: flex;" @expand="">
+    <mat-card-header>
+      <mat-card-title>Your Submission</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <table>
+        <tbody><tr>
+        </tr>
+        <tr>
+          <td><span>First Name:</span></td>
+          <td>{{feedBackCopy.firstname}}</td>
+        </tr>
+        <tr>
+          <td><span>Last Name:</span></td>
+          <td>{{feedBackCopy.lastname}}</td>
+        </tr>
+        <tr>
+          <td><span>Tel. Number:</span></td>
+          <td>{{feedBackCopy.telnum}}</td>
+        </tr>
+        <tr>
+          <td><span>Email:</span></td>
+          <td>{{feedBackCopy.email}}</td>
+        </tr>
+        <tr>
+          <td><span>Contact You:</span></td>
+          <td>{{feedBackCopy.agree}}</td>
+        </tr>
+        <tr>
+          <td><span>How:</span></td>
+          <td>{{feedBackCopy.contacttype}}</td>
+        </tr>
+        <tr>
+          <td><span>Feedback:</span></td>
+          <td>{{feedBackCopy.message}}</td>
+        </tr>
+      </tbody></table>
+    </mat-card-content>
+  </mat-card>
 </div>
