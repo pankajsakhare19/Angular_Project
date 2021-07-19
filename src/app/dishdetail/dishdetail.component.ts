@@ -62,6 +62,7 @@ export class DishdetailComponent implements OnInit {
 
     ngOnInit() {
       this.createForm();
+      this.dishservice.getDishIds().subscribe(dishids => this.dishIds = dishids);
       this.route.params
       .pipe(switchMap((params: Params) => this.dishservice.getDish(params['id'])))
       .subscribe(dish => { this.dish = dish; this.dishcopy = dish; this.setPrevNext(dish.id); },
@@ -69,6 +70,8 @@ export class DishdetailComponent implements OnInit {
     }
   
     setPrevNext(dishId: string) {
+      console.log(this.prev);
+      console.log(this.next);
       const index = this.dishIds.indexOf(dishId);
       this.prev = this.dishIds[(this.dishIds.length + index - 1) % this.dishIds.length];
       this.next = this.dishIds[(this.dishIds.length + index + 1) % this.dishIds.length];
